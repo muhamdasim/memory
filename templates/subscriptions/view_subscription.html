@@ -1,0 +1,55 @@
+{% extends "web/layout.html" %}
+{% load static %}
+{% block title %}
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li>Subscription</li>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons is-right">
+            <a href="{% url 'web:account_settings' %}" class="is-link">Back to Settings</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+{% block section %}
+  <section class="section">
+    <div class="columns columns-reversed">
+      <div class="column">
+
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              My Subscription
+            </p>
+          </header>
+          <div class="card-content">
+            {% if subscription %}
+              <p class="heading">Subscription Details</p>
+              {% include 'subscriptions/components/subscription_details.html' %}
+            {% endif %}
+            {% if subscription %}
+              <form method="POST" action="{{ subscription_urls.create_stripe_portal_session }}">
+                {% csrf_token %}
+                {#        <button type="submit" class="button is-outlined">Manage billing</button>#}
+              </form>
+            {% elif subscription.cancel_at_period_end %}
+              <p class="notification is-primary is-light">
+                Your current subscription will expire on {{ subscription.current_period_end.date }}.
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+{% endblock %}

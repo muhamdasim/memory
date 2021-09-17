@@ -1,0 +1,58 @@
+{% extends "web/layout_simple.html" %}
+{% load static %}
+
+{% block body %}
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-4-widescreen">
+            <form method="post" class="box p-6">
+              {% csrf_token %}
+              <div class="level">
+                <div class="level-left">
+                  <div class="has-text-weight-bold is-size-3">Log in</div>
+                </div>
+                <div class="level-right">
+                  <a class="is-size-6" href="/accounts/signup">Sign up</a>
+                </div>
+              </div>
+              {{ form.non_field_errors }}
+              <div class="field">
+                <label for="" class="label">Email</label>
+                <div class="control has-icons-left">
+                  {{ form.login }}
+                  <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                  {{ form.login.errors }}
+                </div>
+              </div>
+              <div class="field">
+                <label for="" class="label">Password</label>
+                <div class="control has-icons-left">
+                  {{ form.password }}
+                  <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+                </div>
+                {{ form.password.errors }}
+              </div>
+{#              <div class="field">#}
+{#                <label for="" class="checkbox">#}
+{#                  <input type="checkbox">#}
+{#                  Remember me#}
+{#                </label>#}
+{#              </div>#}
+              <div class="field">
+                <button type="submit" class="button is-info is-fullwidth">
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

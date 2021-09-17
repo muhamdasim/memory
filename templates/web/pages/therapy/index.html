@@ -1,0 +1,228 @@
+{% extends "web/layout.html" %}
+{% load static %}
+
+{% block title %}
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li>Therapy</li>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block section %}
+  <section class="section">
+    <div class="columns">
+      <div class="column is-4">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Controls</p>
+          </header>
+          <div class="card-content">
+            <form id="cpanel" class="control">
+              <div class="field">
+                <label class="label">Size</label>
+                <div class="control">
+                  <input id="size" class="slider is-fullwidth" step="1" min="40" max="200" type="range" value="30" />
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Speed</label>
+                <div class="control">
+                  <input id="speed" class="slider is-fullwidth" step="1" min="100" max="900" type="range" value="250" />
+                </div>
+              </div>
+              <div class="field">
+                <div class="control is-expanded">
+                  <label class="checkbox">
+                    <input type="checkbox" id="color" /> Color Changing Dot
+                  </label>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Dot Movement</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="mode">
+                      <option value="emdr-linear">Linear</option>
+                      <option value="emdr-non-linear">8-Shape</option>
+                      <option value="random">Random</option>
+                      <option value="diamond">Diamond</option>
+                      <option value="diagonal">Diagonal</option>
+                      <option value="diagonal-flipped">Diagonal Flipped</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-fullwidth">
+                <label class="label">Background</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="bg">
+                      <option value="#fff">Light Background</option>
+                      <option value="#333">Dark Background</option>
+                      <option value="practice">Therapy Practice</option>
+                      <option value="forrest">Forrest</option>
+                      <option value="mountains">Mountains</option>
+                      <option value="beach">Beach</option>
+                      <option value="hospital">Hospital</option>
+                      <option value="upload" disabled="">Upload Image (Pro)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Sound</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="sound">
+                      <option value="">No Sound</option>
+                      <option value="/static/sounds/sound_1.mp3">Sound 1</option>
+                      {#                      <option value="01-EMDR">Sound 1</option>#}
+                      <option disabled="" value="PRO-05-EMDR">Sound 2 (Pro)</option>
+                      <option disabled="" value="PRO-12-EMDR">Sound 3 (Pro)</option>
+                      <option disabled="" value="PRO-14-EMDR">Sound 4 (Pro)</option>
+                      <option disabled="" value="PRO-18-EMDR">Sound 5 (Pro)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <br>
+            <button id="runDot" class="button is-info">Start</button>
+          </div>
+        </div>
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Patients</p>
+          </header>
+          <div class="card-content">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="field has-addons">
+                <div class="control" style="width: 100%">
+                  <div class="select is-expanded is-fullwidth">
+                    <select id="patient" name="patient" class="is-fullwidth">
+                      <option value="" hidden {% if not selected_patient %} selected {% endif %}>
+                        Select a patient
+                      </option>
+                      {% for patient in patients %}
+                        <option value="{{ patient.id }}" {% if selected_patient == patient.id %} selected {% endif %}>
+                          {{ patient.email }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="control">
+                  <button type="submit" class="button is-info" title="Refresh link">
+                    <i class="fas fa-refresh"></i> Reload
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">What your client sees</p>
+          </header>
+          <div class="card-content">
+            <div class="columns is-multiline">
+              <div class="column is-fullwidth">
+                <div id="dotBox" style="height: 100%; width: 100%; min-height: 31.15rem; position: relative; background: rgb(255, 255, 255);">
+                  <div id="dot" style="height: 30px; width: 30px; border-radius: 50%; background: rgb(0,0,0); position: absolute; left: 0px; top: 0px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <p class="card-header-title">Guideline and Link</p>
+          </div>
+          <div class="card-content">
+            <div style="padding: 0px 15px;">
+              <ol class="has-text-grey-darker">
+                <li class="py-1">
+                  Start a video call with your client. Use any video call application tool.
+                </li>
+                <li class="py-1">
+                  Ask you client to visit URL:
+                  <br>
+                  <div class="field has-addons">
+                    <div class="control" style="width: 100%">
+                      <input readonly value="{{ link }}" id="link" class="input" type="text" placeholder="Select a patient to get a link">
+                    </div>
+                    <div class="control">
+                      <button id="sendBtn" class="button is-info">Send Link</button>
+                    </div>
+                  </div>
+                </li>
+                <li class="py-1">
+                  When they are not on that page, they will see what is the screen above (full screen) and you can start the therapy
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block page_js %}
+  <script src="/static/web/js/therapy.js"></script>
+  <script>
+    setPatient(`{{ selected_patient }}`);
+    $(document).ready(function() {
+      console.log("LOADED");
+      $("#sendBtn").click(function() {
+        console.log("CLICKED");
+        const crf_token = $('[name="csrfmiddlewaretoken"]').val();
+        const email = $("#patient :selected").text().trim();
+        const link = $("#link").val();
+        console.log(email, link);
+        $.ajax({
+          headers:{"X-CSRFToken": crf_token},
+          type: "POST",
+          url: `/api/email/send`,
+          data: {
+            email: email,
+            link: link
+          }
+        }).done((res) => {
+          $("#messages").append(`
+            <li>
+              <div class="is-info notification">
+                <button class="delete"></button>
+                An email has been sent
+              </div>
+            </li>
+          `);
+        }).fail((err) => {
+          $("#messages").append(`
+            <li>
+              <div class="is-danger notification">
+                <button class="delete"></button>
+                Something went wrong.
+              </div>
+            </li>
+          `);
+        })
+
+      });
+    });
+  </script>
+{% endblock %}

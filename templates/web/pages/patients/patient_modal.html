@@ -1,0 +1,29 @@
+<div id="patient-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <h2 class="subtitle is-size-4">
+        Patient Form
+      </h2>
+      <form id="patient-form" action="{% url 'web:api_patients' %}" method="post">
+        {% csrf_token %}
+        <input id="_mode" type="hidden" value=""/>
+        <input id="_id" type="hidden" value=""/>
+
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control">
+            <input id="email" name="email" class="input" type="email" placeholder="">
+          </div>
+          <div id="email_help"></div>
+        </div>
+
+        <div class="control has-text-right">
+          <button type="button" class="button toggle-patient-modal">Close</button>
+          <button type="submit" class="button is-info">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <button class="toggle-patient-modal modal-close is-large" aria-label="close"></button>
+</div>

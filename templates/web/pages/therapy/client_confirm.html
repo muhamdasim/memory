@@ -1,0 +1,89 @@
+{% extends "web/layout_simple.html" %}
+{% load static %}
+
+{% block body %}
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-12-tablet is-6-desktop is-6-widescreen has-text-centered">
+            <img src="/static/web/images/logo-blue.svg" alt="">
+          </div>
+          <div class="column is-12-tablet is-6-desktop is-6-widescreen has-text-centered box p-5">
+            <form action="{% url 'web:therapy_client_confirm' token=token c_token=c_token %}" method="POST">
+              {% csrf_token %}
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">First Name</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control has-text-left">
+                      {{ patient.first_name }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">Last Name</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control has-text-left">
+                      {{ patient.last_name }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">Email</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control has-text-left">
+                      {{ patient.email }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control has-text-left">
+                      <label for="" class="checkbox">
+                        <input type="checkbox" required>
+                        Accept <a href="{% url 'web:terms' %}" target="_blank">Terms & Condition*</a>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <!-- Left empty for spacing -->
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <button type="submit" class="button is-info is-fullwidth">
+                        Go to URL
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

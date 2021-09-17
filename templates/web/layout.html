@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory Remedy</title>
+
+  <link rel="shortcut icon" href="{% static 'web/images/logo-white.svg' %}">
+
+  <!-- Bulma is included -->
+  <link rel="stylesheet" href="{% static 'css/site-base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/site-bulma.css' %}">
+  <link rel="stylesheet" href="{% static 'web/css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'web/css/custom.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.4/dist/css/bulma-slider.min.css">
+
+  <!-- Fonts -->
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+
+  <!-- Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="app">
+  {% if user.active_stripe_subscription %}
+    {% block navs %}
+      {% include 'web/partials/top_nav.html' %}
+      {% include 'web/partials/side_nav.html' %}
+    {% endblock %}
+
+    {% block title %}
+    {% endblock %}
+    {% block messages %}
+      <section class="section py-0 pt-2">
+        <div class="columns is-multiline">
+          <div class="column">
+            <ul class="messages" id="messages">
+              {% for message in messages %}
+                <li class="mb-2">
+                  <div {% if message.tags %} class="is-{{ message.tags }} notification" {% else %} class="notification" {% endif %}>
+                    <button class="delete"></button>
+                    {{ message }}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </section>
+    {% endblock %}
+
+    {% block section %}
+    {% endblock %}
+  {% else %}
+    <script>
+      $(document).ready(() => {
+        {% if not stripe_pending %}
+          window.location.href = '/accounts/subscription'
+        {% endif %}
+      });
+    </script>
+    {% block body %}
+    {% endblock %}
+  {% endif %}
+</div>
+
+{% block page_js %}
+{% endblock page_js %}
+
+<!-- Scripts below are for demo only -->
+<script type="text/javascript" src="{% static 'web/js/main.js' %}"></script>
+
+<!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+</body>
+</html>

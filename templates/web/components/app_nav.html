@@ -1,0 +1,24 @@
+<aside class="menu">
+    <ul class="menu-list">
+        <li>
+            <a href="{% url 'web:home' %}" {% if active_tab == 'dashboard' %}class="is-active"{% endif %}>
+                <span class="icon"><i class="fa fa-home"></i></span><span class="is-hidden-tablet-only">Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'web:patients' %}" {% if active_tab == 'patient' %}class="is-active"{% endif %}>
+                <span class="icon"><i class="fa fa-user"></i></span><span class="is-hidden-tablet-only">Patients</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'web:therapy' %}" {% if active_tab == 'therapy' %}class="is-active"{% endif %}>
+                <span class="icon"><i class="fa fa-circle"></i></span><span class="is-hidden-tablet-only">Therapy</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'web:account_settings' %}" {% if active_tab == 'account_settings' %}class="is-active"{% endif %}>
+                <span class="icon"><i class="fa fa-gear"></i></span><span class="is-hidden-tablet-only">Account Settings</span>
+            </a>
+        </li>
+    </ul>
+</aside>

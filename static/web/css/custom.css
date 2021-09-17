@@ -1,0 +1,15 @@
+.nav-divider {
+  height: 1px;
+  width: 90%;
+  background: white;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.section {
+  padding: 1.5rem 1.5rem;
+}
+
+.section-notification {
+  padding: 0.5rem 1.5rem;
+}

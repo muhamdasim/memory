@@ -1,0 +1,76 @@
+{% extends "web/layout_simple.html" %}
+{% load static %}
+
+{% block body %}
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-4-widescreen">
+            <form method="post" class="box p-6">
+              {% csrf_token %}
+              <div class="level">
+                <div class="level-left">
+                  <div class="has-text-weight-bold is-size-3">Sign up</div>
+                </div>
+                <div class="level-right">
+                  <a class="is-size-6" href="/accounts/login">Log in</a>
+                </div>
+              </div>
+              {{ form.non_field_errors }}
+              <div class="field">
+                <label for="" class="label">Email</label>
+                <div class="control has-icons-left">
+                  {{ form.email }}
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                </div>
+                {{ form.email.errors }}
+              </div>
+              <div class="field">
+                <label for="" class="label">Password</label>
+                <div class="control has-icons-left">
+                  {{ form.password1 }}
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </div>
+                {{ form.password1.errors }}
+              </div>
+              {% if project_settings.ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE %}
+                <div class="field">
+                  <label for="" class="label">Retype Password</label>
+                  <div class="control has-icons-left">
+                    {{ form.password2 }}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                  {{ form.password2.errors }}
+                </div>
+              {% endif %}
+              <div class="field">
+                <label for="" class="checkbox">
+                  {{ form.is_subscribe }}
+                  You agree to receive updates on our service (marketing communications - optional)
+                </label>
+              </div>
+              <div class="field">
+                <label for="" class="checkbox">
+                  {{ form.is_accept }}
+                  Accept <a href="{% url 'web:terms' %}" target="_blank">Terms & Condition*</a>
+                </label>
+              </div>
+              <div class="field">
+                <button class="button is-info is-fullwidth">
+                  Sign up
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

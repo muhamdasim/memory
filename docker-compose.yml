@@ -1,0 +1,54 @@
+version: "3.5"
+
+services:
+  db:
+    container_name: memory_remedy_db
+    image: postgres
+    # persist data beyond lifetime of container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: memory_remedy
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: testpass!
+    ports:
+      - "5432:5432"
+  redis:
+    container_name: memory_remedy_redis
+    image: redis
+    # persistent storage
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+  web:
+   container_name: memory_remedy_web
+   build:
+     context: .
+     dockerfile: Dockerfile.dev
+   command: python manage.py runserver 0.0.0.0:8000
+   volumes:
+     - .:/code
+   environment:
+    DJANGO_SETTINGS_MODULE: memory_remedy.settings_docker
+   ports:
+     - "8000:8000"
+   depends_on:
+     - db
+     - redis
+  celery:
+    container_name: memory_remedy_celery
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A memory_remedy worker -l INFO
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,0 +1,206 @@
+{% extends "web/layout.html" %}
+{% load static %}
+
+{% block title %}
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li>Account Settings</li>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block section %}
+  <section class="section">
+    <div class="columns is-multiline">
+      {# Subscription #}
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Subscription
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  {{ subscription.plan.human_readable_price }}
+                </div>
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <button type="button" class="button is-info">Change</button>
+                </div>
+              </div>
+            </div>
+            <div class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  Family monthly subscription
+                </div>
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <button type="button" class="button is-info">Manage</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {# Account Del #}
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Delete Account
+            </p>
+          </header>
+          <div class="card-content">
+            Before deleting your account, you must cancel your subscription
+            <a id="del-account" href="{% url 'web:account_settings_deleting' %}"  onclick="return confirm('Are you sure you want to delete your account? This cannot be undone')">Delete Account</a>
+          </div>
+        </div>
+      </div>
+      {# Profile #}
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Personal Settings
+            </p>
+          </header>
+          <div class="card-content">
+            <form method="POST" action="{% url 'web:account_settings' %}">
+              {% csrf_token %}
+              {{ profilechange_form.non_field_errors }}
+
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                  {{ profilechange_form.email }}
+                </div>
+                <p class="help">
+                  {{ profilechange_form.email.errors }}
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                  {{ profilechange_form.username }}
+                </div>
+                <p class="help">
+                  {{ profilechange_form.username.errors }}
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label">Language</label>
+                <div class="control">
+                  <div class="select">
+                    {{ profilechange_form.language }}
+                  </div>
+                </div>
+                <p class="help">
+                  {{ profilechange_form.language.errors }}
+                </p>
+              </div>
+
+              <div class="field pt-1">
+                <label class="label"></label>
+                <div class="control">
+                  <label class="checkbox">
+                    {{ profilechange_form.is_subscribe }}
+                    Subscribe to <a href="#">Newsletters</a>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field has-text-right">
+                <div class="control">
+                  <input name="profilechange_form" class="button is-info" type="submit" value="Save">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {# Change Password #}
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Change Password
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  Forgor your password?
+                </div>
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <a href="#">Reset password</a>
+                </div>
+              </div>
+            </div>
+
+            <form method="POST" action="{% url 'web:account_settings' %}">
+              {% csrf_token %}
+              {{ passchange_form.non_field_errors }}
+
+              <div class="field">
+                <label class="label">Current Password</label>
+                <div class="control">
+                  {{ passchange_form.cur_pass }}
+                </div>
+                <p class="help">
+                  {{ passchange_form.cur_pass.errors }}
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label">New Password</label>
+                <div class="control">
+                  {{ passchange_form.new_pass }}
+                </div>
+                <p class="help">
+                  {{ passchange_form.new_pass.errors }}
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label">Repeat Password</label>
+                <div class="control">
+                  {{ passchange_form.repeat_pass }}
+                </div>
+                <p class="help">
+                  {{ passchange_form.repeat_pass.errors }}
+                </p>
+              </div>
+
+              <div class="field has-text-right">
+                <div class="control">
+                  <input name="passchange_form" class="button is-info" type="submit" value="Update">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

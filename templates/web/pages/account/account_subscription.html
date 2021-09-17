@@ -1,0 +1,74 @@
+{% extends "web/layout_simple.html" %}
+{% load static %}
+
+{% block body %}
+  <section class="hero is-fullheight">
+    <form action="post" id="subForm">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-multiline is-centered">
+            {% for price in prices %}
+              <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-content">
+                        <p class="title is-4">{{ price.nickname }}</p>
+                      </div>
+                    </div>
+                    <div class="content mb-0">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris
+                      <p class="subtitle pt-5">
+                        <span>$</span><span>{% widthratio price.unit_amount 100 1 %}</span>/month
+                      </p>
+                    </div>
+                    <div class="field has-text-right">
+                      <label class="checkbox">
+                        <input type="radio" name="plan" value="{{ price.id }}">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="is-divider"></div>
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <button type="submit" class="button is-info">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+  <script>
+    $(document).ready(() => {
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+
+      if (params?.pid) {
+        $(`input[value='${params.pid}']`).prop('checked', true);
+      }
+
+      $('#subForm').submit((e) => {
+        e.preventDefault();
+        console.log($(`input[name='plan']:checked`).val());
+
+        const pubKey = "pk_test_51J4uXDGT3KrVk8FXFaPpWnOlDDcTgKbRgMl9x2VZFPv307xoeO13RqTsdqR8CXP3EJdmIsXKzA1jHZgbYtbUj47K009fHbg87i";
+        const stripe = Stripe(pubKey);
+        $.ajax({
+          type: "POST",
+          url: 'http://127.0.0.1:8000/api/stripe/requesting',
+          headers: {'X-CSRFToken': `{{ csrf_token }}`},
+          data: {
+            csrfmiddlewaretoken : `{{ csrf_token }}`,
+            price_id: $(`input[name='plan']:checked`).val()
+          },
+        }).done((resp) => {
+          return stripe.redirectToCheckout({sessionId: resp.sessionId});
+        })
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,15 @@
+default_context:
+  _pegasus_version: 0.14.2
+  author_name: Andrew Edward
+  css_framework: bulma
+  database: postgres
+  deploy_platform: digital_ocean_app_platform
+  description: Memory Remedy
+  domain_name: localhost:8000
+  email: andrizzle22@gmail.com
+  enable_google_login: n
+  project_name: Memory Remedy
+  project_slug: memory_remedy
+  use_docker: y
+  use_subscriptions: y
+  use_teams: n

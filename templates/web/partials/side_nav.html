@@ -1,0 +1,48 @@
+{% load static %}
+
+<aside class="aside is-placed-left is-expanded">
+  <div class="aside-tools">
+    <div class="aside-tools-label">
+      <img src="{% static 'web/images/logo-white.svg' %}"/>
+    </div>
+
+  </div>
+  <div class="menu is-menu-main">
+    <div class="nav-divider"></div>
+    <ul class="menu-list">
+
+    </ul>
+    <ul class="menu-list">
+      <li>
+        <a href="{% url 'web:home' %}"  class="has-icon {% if active_tab == "home" %} is-active router-link-active {% endif %}">
+          <span class="icon"><i class="fas fa-home"></i></span>
+          <span class="menu-item-label">Start Here</span>
+        </a>
+      </li>
+      <li>
+        <a href="/subscriptions" class="has-icon {% if active_tab == "dashboard" %} is-active router-link-active {% endif %}">
+          <span class="icon"><i class="fas fa-clipboard"></i></span>
+          <span class="menu-item-label">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'web:patients' %}" class="has-icon {% if active_tab == "patients" %} is-active router-link-active {% endif %}">
+          <span class="icon"><i class="fas fa-user"></i></span>
+          <span class="menu-item-label">Patients</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'web:therapy' %}" class="has-icon {% if active_tab == "therapy" %} is-active router-link-active {% endif %}">
+          <span class="icon"><i class="fas fa-dot-circle"></i></span>
+          <span class="menu-item-label">Therapy</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'web:account_settings' %}" class="has-icon {% if active_tab == "account" %} is-active router-link-active {% endif %}">
+          <span class="icon"><i class="fas fa-wrench"></i></span>
+          <span class="menu-item-label">Account Settings</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

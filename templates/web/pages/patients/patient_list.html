@@ -1,0 +1,155 @@
+{% extends "web/layout.html" %}
+{% load static %}
+
+{% block title %}
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li>Patient List</li>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons is-right">
+            <button class="toggle-patient-modal button is-s is-info">Add New</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block section %}
+  <section class="section">
+    <div class="columns is-multiline">
+      <div class="column">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th width="30%"></th>
+          </tr>
+          <tbody>
+          {% if page_obj %}
+            {% for patient in page_obj %}
+              <tr>
+                <td>{{ patient.email }}</td>
+                <td class="has-text-right">
+                  <form action="{% url 'web:therapy' %}" method="POST" class="is-inline">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ patient.id }}" name="patient"/>
+                  <button data-id="{{ patient.id }}" class="start-section is-success button" title="Start a secion for this patient">Start</button>
+                  </form>
+                  <button data-id="{{ patient.id }}" class="toggle-patient-modal button is-info">Edit</button>
+                  {# <button data-email="{{ patient.email }}" class="send-email button">Send Email</button> #}
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr class="has-text-centered">
+              <td colspan="5" class="pt-6 pb-6"> No data </td>
+            </tr>
+          {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="level">
+          <div class="level-item">
+            <div class="buttons has-addons">
+              {% for page in page_obj.paginator.page_range %}
+                <a href="/patients?page={{ forloop.counter }}" type="button" class="button">{{ forloop.counter }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% include 'web/pages/patients/patient_modal.html' %}
+{% endblock %}
+
+{% block page_js %}
+  <script>
+    $(document).ready(() => {
+      $('.toggle-patient-modal').click(async (e) => {
+        $('#patient-form').trigger('reset');
+
+        const editId = $(e.target).data('id');
+        if (editId) {
+          const patient = await $.ajax({
+            type: "GET",
+            url: "/api/patients/"+editId
+          });
+          $("#email").val(patient.email);
+          $("#_mode").val("edit");
+          $("#_id").val(editId);
+        }
+        else {
+          $("#_mode").val("add");
+        }
+        $('#patient-modal').toggleClass('is-active');
+      });
+
+      $('.send-email').click( async (e) => {
+        const crf_token = $('[name="csrfmiddlewaretoken"]').val();
+        const email = $(e.currentTarget).data('email');
+        const resp = await $.ajax({
+          headers:{"X-CSRFToken": crf_token},
+          type: "POST",
+          url: `/api/email/send`,
+          data: {email: email}
+        }).done((res) => {
+          console.log("send-email", res);
+        }).fail((err) => {
+          console.log("error send-email", err);
+        })
+      });
+
+      $('#patient-form').submit(async (e) => {
+        e.preventDefault();
+        const crf_token = $('[name="csrfmiddlewaretoken"]').val();
+        const mode = $('#_mode').val();
+        const form = $('#patient-form');
+        let data = new FormData(form[0]);
+        if (mode === 'add') {
+          try {
+            const resp = await $.ajax({
+              type: 'POST',
+              url: "/api/patients",
+              data: data,
+              processData: false,
+              contentType: false
+            });
+            // reload the page to show new data
+            location.reload();
+          } catch (err) {
+            if (err.status === 400 && err.statusText === 'Bad Request') {
+              for (let e of err.responseJSON.email) {
+                $("#email_help").append(`<p class="help">${e}</p>`);
+              }
+            }
+          }
+        }
+        else if (mode === 'edit') {
+          const resp = await $.ajax({
+            headers:{"X-CSRFToken": crf_token},
+            type: 'PUT',
+            url: `/api/patients/${$('#_id').val()}`,
+            data: data,
+            processData: false,
+            contentType: false
+          });
+          // reload the page to show new data
+          location.reload();
+        }
+      });
+    });
+  </script>
+{% endblock %}
+

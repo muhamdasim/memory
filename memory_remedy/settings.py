@@ -26,7 +26,8 @@ SECRET_KEY = 'SYavNcmaGnKbCnDgjruIfBjwJJHJZpDEsKNZEjDP'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+DEBUG = False
 
 DOMAIN = "http://127.0.0.1:8000"
 
@@ -42,6 +43,7 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.forms',
     'pages',
+    'whitenoise.runserver_nostatic'
 ]
 
 # Put your third-party apps here
@@ -81,6 +83,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PEGASUS_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+       'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -311,3 +314,8 @@ DJSTRIPE_WEBHOOK_SECRET = os.environ.get('DJSTRIPE_WEBHOOK_SECRET', "whsec_4ZSIM
 
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = 'id'  # change to 'djstripe_id' if not a new installation
 DJSTRIPE_USE_NATIVE_JSONFIELD = True  # change to False if not a new installation
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

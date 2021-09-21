@@ -283,7 +283,7 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # replace any values below with specifics for your project
 PROJECT_METADATA = {
     'NAME': "Memory Remedy",
-    'URL': 'http://localhost:8000',
+    'URL': 'https://memoryremedy.herokuapp.com/',
     'DESCRIPTION': "Take control over your business by deploying an all in one healthcare data monitoring solution.y",
     'IMAGE': 'https://upload.wikimedia.org/wikipedia/commons/2/20/PEO-pegasus_black.svg',
     'KEYWORDS': 'SaaS, django',

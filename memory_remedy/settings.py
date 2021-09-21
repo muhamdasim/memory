@@ -136,10 +136,10 @@ FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'memory_remedy',
-        'USER': 'postgres',
-        'PASSWORD': '466464664',
-        'HOST': '127.0.0.1',
+        'NAME': 'd9k803aodhdtjm',
+        'USER': 'jwlluckwfxwdfb',
+        'PASSWORD': '0fa1b02b0a2281828db3087896c5261b2a556b7fe24fc83ff9b4eb98c18488f7',
+        'HOST': 'ec2-54-158-232-223.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }

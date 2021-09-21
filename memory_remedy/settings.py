@@ -24,12 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'SYavNcmaGnKbCnDgjruIfBjwJJHJZpDEsKNZEjDP'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['https://memoryremedy.herokuapp.com/','.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com']
 DEBUG = False
 
-DOMAIN = 'https://memoryremedy.herokuapp.com/'
+DOMAIN = 'memoryremedy.herokuapp.com'
 
 # Application definition
 

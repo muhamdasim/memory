@@ -26,10 +26,10 @@ SECRET_KEY = 'SYavNcmaGnKbCnDgjruIfBjwJJHJZpDEsKNZEjDP'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['https://memoryremedy.herokuapp.com/','.herokuapp.com']
 DEBUG = False
 
-DOMAIN = "http://127.0.0.1:8000"
+DOMAIN = 'https://memoryremedy.herokuapp.com/'
 
 # Application definition
 

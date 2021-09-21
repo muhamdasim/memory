@@ -59,7 +59,7 @@
         const stripe = Stripe(pubKey);
         $.ajax({
           type: "POST",
-          url: 'http://127.0.0.1:8000/api/stripe/requesting',
+          url: 'https://memoryremedy.herokuapp.com/api/stripe/requesting',
           headers: {'X-CSRFToken': `{{ csrf_token }}`},
           data: {
             csrfmiddlewaretoken : `{{ csrf_token }}`,
